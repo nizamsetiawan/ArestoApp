@@ -19,7 +19,7 @@ class RestaurantListPage extends StatelessWidget {
         title: const Text('List Restoran'),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor, // Or any color you prefer
+        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.search, color: Colors.white),
         onPressed: () {
           Navigator.pushNamed(context, AppRoutes.restaurantSearch);

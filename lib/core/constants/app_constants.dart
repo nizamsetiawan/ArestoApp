@@ -20,4 +20,14 @@ class AppConstants {
 
   // App constants
   static const String appName = 'ARestro';
+
+  // New constants for favorites and notifications
+  static const String favoriteIcon = 'assets/icons/favorite.png';
+  static const String favoriteFilledIcon = 'assets/icons/favorite_filled.png';
+  static const String settingsIcon = 'assets/icons/settings.png';
+  static const String notificationIcon = 'assets/icons/notification.png';
+
+  // Notification channel
+  static const String notificationChannelId = 'daily_reminder';
+  static const String notificationChannelName = 'Lunch Reminder';
 }

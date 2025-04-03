@@ -15,12 +15,15 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const RestaurantListPage());
       case AppRoutes.restaurantDetail:
         final restaurant = settings.arguments as Restaurant;
-
         return MaterialPageRoute(
           builder: (_) => RestaurantDetailPage(restaurant: restaurant),
         );
       case AppRoutes.restaurantSearch:
         return MaterialPageRoute(builder: (_) => const RestaurantSearchPage());
+      case AppRoutes.favorites:
+        return MaterialPageRoute(builder: (_) => const FavoritesPage());
+      case AppRoutes.settings:
+        return MaterialPageRoute(builder: (_) => const SettingsPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
