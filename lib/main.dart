@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'core/constants/app_constants.dart';
-import 'core/navigation/route_generator.dart';
-import 'core/styles/app_colors.dart';
-import 'core/styles/app_text_styles.dart';
-import 'injection_container.dart' as di;
-import 'core/navigation/app_routes.dart';
-import 'features/restaurant/presentation/providers/restaurant_list_provider.dart';
+import 'package:arestro/core/constants/app_constants.dart';
+import 'package:arestro/core/navigation/app_routes.dart';
+import 'package:arestro/core/navigation/route_generator.dart';
+import 'package:arestro/core/styles/app_colors.dart';
+import 'package:arestro/core/styles/app_text_styles.dart';
+import 'package:arestro/injection_container.dart' as di;
+
+import 'core/notification/notification_helper.dart';
+import 'features/favorite/presentation/providers/favorite_provider.dart';
 import 'features/restaurant/presentation/providers/restaurant_detail_provider.dart';
+import 'features/restaurant/presentation/providers/restaurant_list_provider.dart';
 import 'features/restaurant/presentation/providers/restaurant_search_provider.dart';
+import 'features/setting/presentation/providers/reminder_provider.dart';
+import 'features/setting/presentation/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
+
+  // Initialize notifications
+  final notificationHelper = di.sl<NotificationHelper>();
+  await notificationHelper.initNotifications();
+  await notificationHelper.flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
   runApp(const MyApp());
 }
 
@@ -23,23 +34,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => di.sl<RestaurantListProvider>(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => di.sl<RestaurantDetailProvider>(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => di.sl<RestaurantSearchProvider>(),
-        ),
+        ChangeNotifierProvider(create: (_) => di.sl<RestaurantListProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<RestaurantDetailProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<RestaurantSearchProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<FavoriteProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<ThemeProvider>()),
+        ChangeNotifierProvider(create: (_) => di.sl<ReminderProvider>()),
       ],
-      child: MaterialApp(
-        title: AppConstants.appName,
-        theme: _buildLightTheme(),
-        darkTheme: _buildDarkTheme(),
-        themeMode: ThemeMode.system, // Mengikuti tema sistem
-        initialRoute: AppRoutes.initial,
-        onGenerateRoute: RouteGenerator.generateRoute,
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) {
+          return MaterialApp(
+            title: AppConstants.appName,
+            theme: _buildLightTheme(),
+            darkTheme: _buildDarkTheme(),
+            themeMode: themeProvider.themeMode,
+            initialRoute: AppRoutes.initial,
+            onGenerateRoute: RouteGenerator.generateRoute,
+          );
+        },
       ),
     );
   }
@@ -51,7 +63,7 @@ class MyApp extends StatelessWidget {
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         surface: Colors.white,
-        background: AppColors.background,
+        background: AppColors.lightBackground,
         error: AppColors.error,
       ),
       textTheme: AppTextStyles.textTheme,
@@ -63,20 +75,6 @@ class MyApp extends StatelessWidget {
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      cardTheme: CardTheme(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.primary.withOpacity(0.3)),
-        ),
-        filled: true,
-        fillColor: Colors.grey[50],
-      ),
     );
   }
 
@@ -86,37 +84,21 @@ class MyApp extends StatelessWidget {
       colorScheme: const ColorScheme.dark(
         primary: AppColors.secondary,
         secondary: AppColors.secondary,
-        surface: Color(0xFF121212),
-        background: Color(0xFF121212),
+        surface: AppColors.darkSurface,
+        background: AppColors.darkBackground,
         error: AppColors.error,
       ),
       textTheme: AppTextStyles.textTheme.apply(
-        bodyColor: Colors.white,
-        displayColor: Colors.white,
+        bodyColor: AppColors.darkTextPrimary,
+        displayColor: AppColors.darkTextPrimary,
       ),
       appBarTheme: AppBarTheme(
         elevation: 0,
         backgroundColor: AppColors.secondary,
         titleTextStyle: AppTextStyles.textTheme.titleLarge?.copyWith(
-          color: Colors.white,
+          color: AppColors.darkTextPrimary,
         ),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      cardTheme: CardTheme(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        color: const Color(0xFF1E1E1E),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: AppColors.secondary.withOpacity(0.3)),
-        ),
-        filled: true,
-        fillColor: const Color(0xFF1E1E1E),
-        labelStyle: TextStyle(color: Colors.white70),
+        iconTheme: const IconThemeData(color: AppColors.darkTextPrimary),
       ),
     );
   }

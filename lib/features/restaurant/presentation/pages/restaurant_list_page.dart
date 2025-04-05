@@ -17,6 +17,16 @@ class RestaurantListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('List Restoran'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.favorites),
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,

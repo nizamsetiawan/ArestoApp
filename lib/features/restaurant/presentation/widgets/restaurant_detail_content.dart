@@ -1,6 +1,8 @@
 import 'package:arestro/core/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../../../favorite/presentation/widgets/favorite_button.dart';
+import '../../domain/entities/restaurant.dart';
 import '../../domain/entities/restaurant_detail.dart';
 import 'bottom_sheet_review.dart';
 
@@ -18,6 +20,21 @@ class RestaurantDetailContent extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(restaurantDetail.name),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: FavoriteButton(
+              restaurant: Restaurant(
+                id: restaurantDetail.id,
+                name: restaurantDetail.name,
+                description: restaurantDetail.description,
+                pictureId: restaurantDetail.pictureId,
+                city: restaurantDetail.city,
+                rating: restaurantDetail.rating,
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -57,7 +74,7 @@ class RestaurantDetailContent extends StatelessWidget {
                     children: [
                       const Icon(Icons.location_on),
                       const SizedBox(width: 4),
-                      Text(restaurantDetail.city),
+                      Text("${restaurantDetail.address}, ${restaurantDetail.city}"),
                     ],
                   ),
                   const SizedBox(height: 8),

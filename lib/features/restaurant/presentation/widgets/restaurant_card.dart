@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/navigation/app_routes.dart';
 import '../../../../core/styles/app_colors.dart';
 import '../../domain/entities/restaurant.dart';
+import '../../../favorite/presentation/widgets/favorite_button.dart';
 
 class RestaurantCard extends StatelessWidget {
   final Restaurant restaurant;
@@ -67,25 +68,36 @@ class RestaurantCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Chip(
-                        side: const BorderSide(
-                          color: AppColors.secondary,
-                          width: 2.0,
-                        ),
-                        label: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.star,
+                      // This is where you add the FavoriteButton alongside the rating
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Chip(
+                            side: const BorderSide(
                               color: AppColors.secondary,
-                              size: 20,
+                              width: 2.0,
                             ),
-                            const SizedBox(width: 2),
-                            Text(
-                              restaurant.rating.toString(),
-                              style: const TextStyle(fontWeight: FontWeight.bold,color: AppColors.secondary),
+                            label: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.star,
+                                  color: AppColors.secondary,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 2),
+                                Text(
+                                  restaurant.rating.toString(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.secondary
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: 8), // Add some spacing
+                          FavoriteButton(restaurant: restaurant),
+                        ],
                       ),
                     ],
                   ),

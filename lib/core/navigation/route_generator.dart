@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../features/favorite/presentation/pages/favorites_page.dart';
 import '../../features/restaurant/presentation/pages/restaurant_detail_page.dart';
 import '../../features/restaurant/presentation/pages/restaurant_list_page.dart';
 import '../../features/restaurant/presentation/pages/restaurant_search_page.dart';
+import '../../features/setting/presentation/pages/settings_page.dart';
 import 'app_routes.dart';
 
 import '../../features/restaurant/domain/entities/restaurant.dart';

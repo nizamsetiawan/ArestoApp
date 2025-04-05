@@ -19,6 +19,15 @@ class RestaurantModel extends Restaurant {
     rating: json["rating"].toDouble(),
   );
 
+  factory RestaurantModel.fromEntity(Restaurant restaurant) => RestaurantModel(
+    id: restaurant.id,
+    name: restaurant.name,
+    description: restaurant.description,
+    pictureId: restaurant.pictureId,
+    city: restaurant.city,
+    rating: restaurant.rating,
+  );
+
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
@@ -27,4 +36,6 @@ class RestaurantModel extends Restaurant {
     "city": city,
     "rating": rating,
   };
+
+
 }
